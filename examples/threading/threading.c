@@ -8,12 +8,33 @@
 //#define DEBUG_LOG(msg,...) printf("threading: " msg "\n" , ##__VA_ARGS__)
 #define ERROR_LOG(msg,...) printf("threading ERROR: " msg "\n" , ##__VA_ARGS__)
 
-void* threadfunc(void* thread_param)
+void* threadfunc(void* thread_param) // thread_param = thread_data
 {
-
     // TODO: wait, obtain mutex, wait, release mutex as described by thread_data structure
     // hint: use a cast like the one below to obtain thread arguments from your parameter
     //struct thread_data* thread_func_args = (struct thread_data *) thread_param;
+
+    //Typecast to struct thread_data*
+    struct thread_data *thread_func_args = (struct thread_data *) thread_param;
+
+    //Wait for wait_to_obtain_ms amount of time
+    usleep(thread_func_args->wait_to_obtain_ms*1000);
+
+    //Obtain the mutex
+    if (pthread_mutex_lock(thread_func_args->mutex) != 0){
+        thread_func_args->thread_complete_success = false;
+        return thread_param;
+    }
+
+    //Wait for wait_to_release_ms amount of time
+    usleep(thread_func_args->wait_to_release_ms*1000);
+
+    //Release mutex
+    if(pthread_mutex_unlock(thread_func_args->mutex) != 0){
+        thread_func_args->thread_complete_success = false;
+        return thread_param;
+    }
+    thread_func_args->thread_complete_success = true;      
     return thread_param;
 }
 
@@ -28,6 +49,22 @@ bool start_thread_obtaining_mutex(pthread_t *thread, pthread_mutex_t *mutex,int 
      *
      * See implementation details in threading.h file comment block
      */
-    return false;
+
+    //Allocate memory for thread_data and setup mutex and wait arguments
+    struct thread_data *new_thread_data;
+    new_thread_data = malloc(sizeof(struct thread_data));
+    new_thread_data->mutex = mutex;
+    new_thread_data->thread_complete_success = false;
+    new_thread_data->wait_to_obtain_ms = wait_to_obtain_ms;
+    new_thread_data->wait_to_release_ms = wait_to_release_ms;
+
+    //Create thread and pass thread_data
+    if( pthread_create(thread, NULL, threadfunc, new_thread_data) != 0){
+        printf("ERROR: Thread could not be created");\
+        free(new_thread_data);
+        return false;
+    }
+
+    return true;
 }
 
