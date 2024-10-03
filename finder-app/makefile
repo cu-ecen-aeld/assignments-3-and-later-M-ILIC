@@ -1,6 +1,3 @@
-CROSS_COMPILE ?=
-CC ?= $(CROSS_COMPILE)gcc
-
 all:
 	writer
 writer: writer.o
