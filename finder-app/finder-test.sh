@@ -10,6 +10,11 @@ WRITESTR=AELD_IS_FUN
 WRITEDIR=/tmp/aeld-data
 username=$(cat conf/username.txt)
 
+# Assignment 4 part 2 (4b)
+OUTDIR=$(dirname $0)
+cd OUTDIR
+
+
 if [ $# -lt 3 ]
 then
 	echo "Using default value ${WRITESTR} for string to write"
@@ -64,6 +69,9 @@ rm -rf /tmp/aeld-data
 
 set +e
 echo ${OUTPUTSTRING} | grep "${MATCHSTR}"
+# Assignment 4 part 2 (4c)
+echo ${OUTPUTSTRING} > /tmp/assignment-4-result.txt
+
 if [ $? -eq 0 ]; then
 	echo "success"
 	exit 0
