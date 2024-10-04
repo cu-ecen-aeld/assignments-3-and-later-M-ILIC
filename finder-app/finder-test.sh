@@ -12,7 +12,7 @@ username=$(cat /etc/finder-app/conf/username.txt)
 
 # Assignment 4 part 2 (4b)
 OUTDIR=$(dirname $0)
-cd OUTDIR
+cd $OUTDIR
 
 
 if [ $# -lt 3 ]
