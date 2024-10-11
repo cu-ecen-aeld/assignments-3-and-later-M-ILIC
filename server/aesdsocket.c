@@ -44,6 +44,9 @@ int receive_message(struct addrinfo *server_info, int new_fd, char *client_ip_st
         }
     }
     if (status > 0){
+        if (buffer[status-1] != '\n'){
+            buffer[status] = '\n';
+        }
         // buffer[status] = '\0';
         // printf("Recieved this bytes: %i\n", status);
         // printf("%s\n", buffer);
