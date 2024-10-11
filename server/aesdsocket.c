@@ -44,7 +44,7 @@ int receive_message(struct addrinfo *server_info, int new_fd, char *client_ip_st
         }
     }
     if (status > 0){
-        buffer[status] = '\0';
+        // buffer[status] = '\0';
         // printf("Recieved this bytes: %i\n", status);
         // printf("%s\n", buffer);
         file = fopen(filename, "a"); 
