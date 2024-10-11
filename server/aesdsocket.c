@@ -31,48 +31,35 @@ int receive_message(struct addrinfo *server_info, int new_fd, char *client_ip_st
     int status;
     FILE *file;
     char buffer[1000];
-    while((status = recv(new_fd, buffer, sizeof(buffer), 0)) == sizeof(buffer) && buffer[status-1] != '\n'){
-        // printf("Recieved this bytes: %i\n", status);
-        file = fopen(filename, "a"); 
+    file = fopen(filename, "a"); 
+    while((status = recv(new_fd, buffer, sizeof(buffer), 0)) == sizeof(buffer)){
         status = fwrite(buffer, 1, status, file);
         if (status == -1){
             return_failure("ERROR: writing to file failed", server_info);
-        }
-        status = fclose(file);
-        if (status == -1){
-            return_failure("ERROR: closing file failed", server_info);
         }
     }
     if (status > 0){
-        if (buffer[status-1] != '\n'){
-            buffer[status] = '\n';
-        }
-        // buffer[status] = '\0';
-        // printf("Recieved this bytes: %i\n", status);
-        // printf("%s\n", buffer);
-        file = fopen(filename, "a"); 
         status = fwrite(buffer, 1, status, file);
         if (status == -1){
             return_failure("ERROR: writing to file failed", server_info);
         }
-        status = fclose(file);
-        if (status == -1){
-            return_failure("ERROR: closing file failed", server_info);
-        }
     } else if (status == -1){
         return_failure("ERROR: receiving to buffer failed", server_info);
+    }
+    status = fclose(file);
+    if (status == -1){
+        return_failure("ERROR: closing file failed", server_info);
     }
     return 0;   
 }
 
 int send_file_to_client(struct addrinfo *server_info, int new_fd){
     char buffer[1000];
-    int status, prev_status;
+    int status;
     FILE *file;
     file = fopen(filename, "r");
     while((status = fread(buffer, 1, sizeof(buffer), file)) > 0){
         // printf("Sending this bytes: %i\n", status);
-        prev_status = status;
         status = send(new_fd, buffer, status, 0);
         if (status == -1){
             return_failure("ERROR: sending file to client failed", server_info);
