@@ -108,7 +108,7 @@ int main(int argc, char *argv[]) {
 
     openlog(NULL, 0, LOG_USER);
     memset(&hints, 0, sizeof hints);
-    hints.ai_family = AF_INET;
+    hints.ai_family = AF_INET6;
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_flags = AI_PASSIVE;
 
@@ -146,8 +146,8 @@ int main(int argc, char *argv[]) {
             printf("ERROR: accept failed\n");
             continue;
         }
-        struct sockaddr_in *ipv4 = (struct sockaddr_in *)&client;
-        inet_ntop(AF_INET, &(ipv4->sin_addr), client_ip_str, sizeof(client_ip_str));
+        struct sockaddr_in6 *ipv6 = (struct sockaddr_in6 *)&client;
+        inet_ntop(AF_INET6, &(ipv6->sin6_addr), client_ip_str, sizeof(client_ip_str));
         log_accepted_str[25] = '\0'; // to remove previous client ip
         strcat(log_accepted_str, client_ip_str);
         printf("%s\n", log_accepted_str);
