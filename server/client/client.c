@@ -30,7 +30,7 @@ int main() {
         return 1;
     }
     char buffer[1000];
-    char msg1[6] = {'h', 'e', 'r', 'r', 'o', '\n'};
+    char msg1[6] = {'h', 'e', 'l', 'l', 'o', '\n'};
     status = send(socket_fd, msg1, sizeof(msg1), 0);
     printf("MESSAGE SENT, status: %i\n", status);
     status = recv(socket_fd, buffer, sizeof(buffer), 0);
