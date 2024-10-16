@@ -89,7 +89,7 @@ void signal_handler(int signal_number){
 
 int main(int argc, char *argv[]) {
     char *SERVER_PORT = "9000";
-    char *HOSTNAME = "localhost";
+    char *HOSTNAME = "0.0.0.0";
     int status, socket_fd, new_fd;
     struct addrinfo hints;
     struct addrinfo *server_info;

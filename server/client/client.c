@@ -5,6 +5,7 @@
 #include <netdb.h>
 #include <string.h>
 #include <stdbool.h>
+#include <errno.h>
 
 int main() {
     int socket_fd;
@@ -34,6 +35,9 @@ int main() {
     status = send(socket_fd, msg1, sizeof(msg1), 0);
     printf("MESSAGE SENT, status: %i\n", status);
     status = recv(socket_fd, buffer, sizeof(buffer), 0);
+    if (status = -1){
+        perror("recv");
+    }
     printf("Recieved this bytes: %i\n", status);
     buffer[status] = '\0';
     printf("%s\n", buffer);
